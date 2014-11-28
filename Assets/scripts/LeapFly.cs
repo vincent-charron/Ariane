@@ -40,7 +40,8 @@ public class LeapFly : MonoBehaviour {
   
   void FixedUpdate () {
     
-    Frame frame = m_leapController.Frame();
+		Frame frame = m_leapController.Frame();
+		Vector3 newRot = transform.parent.localRotation.eulerAngles;
   
     if (frame.Hands.Count >= 2) {
       Hand leftHand = GetLeftMostHand(frame);
@@ -52,22 +53,27 @@ public class LeapFly : MonoBehaviour {
       
       Vector3 handDiff = leftHand.PalmPosition.ToUnityScaled() - rightHand.PalmPosition.ToUnityScaled();
       
-      Vector3 newRot = transform.parent.localRotation.eulerAngles;
       newRot.z = -handDiff.y * 60.0f;
       
       // adding the rot.z as a way to use banking (rolling) to turn.
       newRot.y += handDiff.z * 50.0f - newRot.z * 0.03f * transform.parent.rigidbody.velocity.magnitude;
       newRot.x = -(avgPalmForward.y - 0.1f) * 100.0f;
+      
 
-      float forceMult = 1.0f;
-      
-      // if closed fist, then stop the plane and slowly go backwards.
-		if (frame.Fingers.Count < 2 && frame.Fingers.Count < 0) {
-        	forceMult = 3.0f;
-      	}
-      
-      transform.parent.localRotation = Quaternion.Slerp(transform.parent.localRotation, Quaternion.Euler(newRot), 0.1f);
-      transform.parent.rigidbody.velocity = transform.parent.forward * forceMult;
+		}
+		
+		float forceMult = 1.0f;
+
+		// if closed fist, then stop the plane and slowly go backwards.
+		if (frame.Fingers.Count < 2 && frame.Fingers.Count > 0) {
+			forceMult = 3.0f;
+		}else if( frame.Fingers.Count <= 0){
+			forceMult = 0.0f;
+		}
+		
+		Debug.Log("forceMult: "+forceMult);	
+		transform.parent.localRotation = Quaternion.Slerp(transform.parent.localRotation, Quaternion.Euler(newRot), 0.1f);
+		transform.parent.rigidbody.velocity = transform.parent.forward * forceMult * speed;
     }
 
   }
