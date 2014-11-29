@@ -2,6 +2,9 @@ using UnityEngine;
 using System.Collections;
 using Leap;
 
+
+// KIKOO C'EST MOI
+
 public class LeapFly : MonoBehaviour {
   
   Controller m_leapController;
