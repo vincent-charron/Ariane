@@ -40,22 +40,26 @@ public class LoadLine : MonoBehaviour {
 			spheres = new List<GameObject> ();
 			newSphere = new GameObject (i.ToString ());
 			newSphere.transform.position = container.Spheres [0].Position;
-			newSphere.transform.parent = line.transform;
+            newSphere.transform.parent = line.transform;
 			spheres.Add (newSphere);
 			for (i=1; i< container.Spheres.Count; i++) {
 				newSphere = new GameObject (i.ToString ());
-				LineRenderer lineRenderer = newSphere.AddComponent<LineRenderer> ();
+                LineRenderer lineRenderer = newSphere.AddComponent<LineRenderer>();
+                newSphere.AddComponent<LineScript>();
+                newSphere.GetComponent<LineScript>().player = GameObject.Find("Sphere");
 				newSphere.transform.position = container.Spheres [i].Position;
 				lineRenderer.material = lineMaterial;
 				lineRenderer.SetWidth (container.Spheres [i].Width, container.Spheres [i].Width);
 				if(lineColor != Color.clear){
-					lineRenderer.SetColors (lineColor, lineColor);
+                    lineRenderer.SetColors(lineColor, lineColor);
+                    newSphere.GetComponent<LineScript>().colorLine = lineColor;
 				}else{
-					lineRenderer.SetColors (container.Spheres [i].ColorLine, container.Spheres [i].ColorLine);
+                    lineRenderer.SetColors(container.Spheres[i].ColorLine, container.Spheres[i].ColorLine);
+                    newSphere.GetComponent<LineScript>().colorLine = container.Spheres[i].ColorLine;
 				}
 				lineRenderer.SetPosition (0, spheres.Last ().transform.position);
 				lineRenderer.SetPosition (1, newSphere.transform.position);
-				newSphere.transform.parent = line.transform;
+                newSphere.transform.parent = line.transform;
 				spheres.Add (newSphere);
 			}
 			line.transform.parent = previousLines.transform;
