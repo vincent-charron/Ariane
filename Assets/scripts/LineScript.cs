@@ -5,7 +5,7 @@ public class LineScript : MonoBehaviour {
 
     public int distance = 20;
     public GameObject player;
-    private float distanceToPlayer;
+    public int distanceToPlayer;
     public Color colorLine;
 
 	// Use this for initialization
@@ -15,10 +15,17 @@ public class LineScript : MonoBehaviour {
 	
 	// Update is called once per frame
 	void Update () {
-        distanceToPlayer = Vector3.Distance(player.transform.position, transform.position);
+        distanceToPlayer = (int)Vector3.Distance(player.transform.position, transform.position);
         if (distanceToPlayer > distance)
         {
-            colorLine.a = 0;
+            if (distanceToPlayer < (distance + 10))
+            {
+                colorLine.a = 1-((float)distanceToPlayer/(float)(distance+10));
+            }
+            else
+            {
+                colorLine.a = 0;
+            }
             this.GetComponent<LineRenderer>().SetColors(colorLine, colorLine);
         }
         else
