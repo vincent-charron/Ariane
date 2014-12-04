@@ -6,10 +6,11 @@ using System.Linq;
 public class CreateLine : MonoBehaviour {
 
 	public float lineWidth = 1;	//l'épaisseur du fil se traçant derrière la boule
-	private int nbSphereLine = 0;	//le nombre de sphère composant le fil actuel
-	public Color colorLine = Color.red;	//la couleur du fil
+    private int nbSphereLine = 0;	//le nombre de sphère composant le fil actuel
+    public Color colorLine = Color.red;	//la couleur du fil
+    public Color colorLineActivated = Color.blue;	//la couleur que prend le fil si le joueur s'en approche
 	public Material lineMaterial;	//le matériel du fil
-	
+
 	//on enregistre une liste de gameobject qui se relieront entre eux pour former une ligne rouge
 	private LineClass lineSave;	//l'objet qui permettra d'enregistrer les différentes informations du fil, afin de les enregistrer et pouvoir recréer le fil à un prochaine partie
 	private SphereLine sphereSave;	//objet permettant d'enregistrer les différents informations de la dernière sphère.
@@ -17,17 +18,13 @@ public class CreateLine : MonoBehaviour {
 	private GameObject currentLine;	//le gameObject formant le fil actuel
 	private List<GameObject> spheres;	//la liste permettant de stocker l'ensemble des sphères formant le fil.
 	private GameObject newSphere; //dernière sphère gameObject du fil
-    private List<GameObject> cylinders;
-    private GameObject newCylinder;
 
 	// Use this for initialization
 	void Start () {
 		//création du gameObject fil
 		currentLine = new GameObject ("currentLine");
 		spheres = new List<GameObject> ();
-        cylinders = new List<GameObject>();
         spheres.Add(new GameObject(nbSphereLine.ToString()));
-        cylinders.Add(GameObject.CreatePrimitive(PrimitiveType.Capsule));
 
 		//création de l'objet de sauvegarde
 		lineSave = new LineClass ("lineObject");
@@ -39,31 +36,27 @@ public class CreateLine : MonoBehaviour {
 		newSphere = spheres.Last();
 		newSphere.transform.parent = currentLine.transform;	//le parent de chaque sphère est le gameObject currentLine
 		newSphere.AddComponent<LineRenderer>();
+        SphereCollider sp = newSphere.AddComponent<SphereCollider>();
+        sp.isTrigger = true;
 		newSphere.transform.position = this.transform.position;	//la position de la sphère est celle de la boule à l'instant où la sphère est créée
         newSphere.AddComponent<LineScript>();
         newSphere.GetComponent<LineScript>().player = gameObject;
+        newSphere.GetComponent<LineScript>().previousNode = null;
         newSphere.GetComponent<LineScript>().colorLine = colorLine;
-
-        //creation du game object correspondant au dernier cylindre
-        /*newCylinder = cylinders.Last();
-        newCylinder.name = nbSphereLine.ToString();
-        newCylinder.transform.parent = currentLine.transform;
-        newCylinder.transform.position = this.transform.position;
-        newCylinder.transform.localScale = new Vector3(0.1F, 0.25F, 0.1F);
-        newCylinder.collider.enabled = false;*/
 	}
 	
 	// Update is called once per frame
 	void Update () {
 		//script de création et de sauvegarde du fil actuel
-		if (Vector3.Distance(newSphere.transform.position, this.transform.position) > 0.3) {
+		if (Vector3.Distance(newSphere.transform.position, this.transform.position) > 0.5) {
 			nbSphereLine++;
 			
 			//sauvegarde des paramètres de la dernière sphère
 			sphereSave = new SphereLine(nbSphereLine.ToString());
 			lineSave.Spheres.Add(sphereSave);
-			sphereSave.Width = lineWidth;	//sauvegarde de l'épaisseur du fil
-			sphereSave.ColorLine = colorLine;	//sauvegarde de la couleur du fil
+            sphereSave.Width = lineWidth;	//sauvegarde de l'épaisseur du fil
+            sphereSave.ColorLine = colorLine;	//sauvegarde de la couleur du fil
+            sphereSave.ColorLineActivated = colorLineActivated;	//sauvegarde de la couleur du fil
 			sphereSave.Position = this.transform.position;	//sauvegarde de la position de la sphère
 			
 			//création du game object correspondant à la dernière sphère
@@ -71,21 +64,15 @@ public class CreateLine : MonoBehaviour {
 			LineRenderer lineRenderer = newSphere.AddComponent<LineRenderer>();	//chaque gameObject Sphere a un composant ligne de rendu, permettant de tracer une ligne derrière eux
 			newSphere.transform.position = this.transform.position;	//la position de la boule est celle de le sphère à l'instant de sa création
             newSphere.transform.parent = currentLine.transform;	//le gameObject parent de la sphere est le game Object formant la ligne actuelle.
+            SphereCollider sp = newSphere.AddComponent<SphereCollider>();
+            sp.isTrigger = true;
             newSphere.AddComponent<LineScript>();
             newSphere.GetComponent<LineScript>().player = gameObject;
             newSphere.GetComponent<LineScript>().colorLine = colorLine;
-
-            //creation du game object correspondant au dernier cylindre
-            /*newCylinder = GameObject.CreatePrimitive(PrimitiveType.Capsule);
-            newCylinder.name = nbSphereLine.ToString();
-            newCylinder.transform.parent = currentLine.transform;
-            newCylinder.transform.position = this.transform.position;
-            newCylinder.transform.localScale = new Vector3(0.1F, 0.25F, 0.1F);
-            newCylinder.collider.enabled = false;
-            newCylinder.transform.up = newCylinder.transform.position - cylinders.Last().transform.position;
-            //newCylinder.transform.Translate(-newCylinder.transform.up * Time.deltaTime);
-            cylinders.Add(newCylinder);*/
-
+            newSphere.GetComponent<LineScript>().colorLineActivated = colorLineActivated;
+            newSphere.GetComponent<LineScript>().previousNode = spheres.Last();
+            spheres.Last().GetComponent<LineScript>().nextNode = newSphere;
+            newSphere.GetComponent<LineScript>().nextNode = null;
 			
 			//paramétrage de la ligne de rendu
 			lineRenderer.material = lineMaterial;

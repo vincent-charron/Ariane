@@ -56,22 +56,31 @@ public class SphereLine{
 				set;
 	}
 
-	public Color ColorLine {
-				get;
-				set;
-	}
+    public Color ColorLine
+    {
+        get;
+        set;
+    }
+
+    public Color ColorLineActivated
+    {
+        get;
+        set;
+    }
 
 	public SphereLine(){
 		Name = "";
 		Position = new Vector3 (0, 0, 0);
 		Width = 0;
 		ColorLine = Color.white;
+        ColorLineActivated = Color.black;
 	}
 
 	public SphereLine(string name){
 		Name = name;
 		Position = new Vector3 (0, 0, 0);
 		Width = 0;
-		ColorLine = Color.white;
+        ColorLine = Color.white;
+        ColorLineActivated = Color.black;
 	}
 }

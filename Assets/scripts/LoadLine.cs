@@ -8,7 +8,7 @@ using System.Linq;
 public class LoadLine : MonoBehaviour {
 	
 	public Material lineMaterial;
-	public Color lineColor = Color.clear;
+	public Color ColorLine = Color.clear;
 	public GameObject previousLines;
 
 	//liste contenant l'ensemble des sphères formant la ligne
@@ -40,22 +40,36 @@ public class LoadLine : MonoBehaviour {
 			spheres = new List<GameObject> ();
 			newSphere = new GameObject (i.ToString ());
 			newSphere.transform.position = container.Spheres [0].Position;
-            newSphere.transform.parent = line.transform;
+            newSphere.transform.parent = line.transform; newSphere.AddComponent<LineScript>();
+            newSphere.GetComponent<LineScript>().player = gameObject;
+            newSphere.GetComponent<LineScript>().previousNode = null;
+            newSphere.GetComponent<LineScript>().colorLine = ColorLine;
+            newSphere.GetComponent<LineScript>().colorLineActivated = ColorLine;
+            newSphere.AddComponent<LineRenderer>();
+            SphereCollider sp = newSphere.AddComponent<SphereCollider>();
+            sp.isTrigger = true;
 			spheres.Add (newSphere);
 			for (i=1; i< container.Spheres.Count; i++) {
 				newSphere = new GameObject (i.ToString ());
                 LineRenderer lineRenderer = newSphere.AddComponent<LineRenderer>();
+                sp = newSphere.AddComponent<SphereCollider>();
+                sp.isTrigger = true;
                 newSphere.AddComponent<LineScript>();
                 newSphere.GetComponent<LineScript>().player = GameObject.Find("Sphere");
+                newSphere.GetComponent<LineScript>().previousNode = spheres.Last();
+                spheres.Last().GetComponent<LineScript>().nextNode = newSphere;
+                newSphere.GetComponent<LineScript>().nextNode = null;
 				newSphere.transform.position = container.Spheres [i].Position;
 				lineRenderer.material = lineMaterial;
 				lineRenderer.SetWidth (container.Spheres [i].Width, container.Spheres [i].Width);
-				if(lineColor != Color.clear){
-                    lineRenderer.SetColors(lineColor, lineColor);
-                    newSphere.GetComponent<LineScript>().colorLine = lineColor;
+				if(ColorLine != Color.clear){
+                    lineRenderer.SetColors(ColorLine, ColorLine);
+                    newSphere.GetComponent<LineScript>().colorLine = ColorLine;
+                    newSphere.GetComponent<LineScript>().colorLineActivated = ColorLine;
 				}else{
                     lineRenderer.SetColors(container.Spheres[i].ColorLine, container.Spheres[i].ColorLine);
                     newSphere.GetComponent<LineScript>().colorLine = container.Spheres[i].ColorLine;
+                    newSphere.GetComponent<LineScript>().colorLineActivated = container.Spheres[i].ColorLineActivated;
 				}
 				lineRenderer.SetPosition (0, spheres.Last ().transform.position);
 				lineRenderer.SetPosition (1, newSphere.transform.position);
