@@ -4,7 +4,7 @@ using System.Timers;
 
 public class LineScript : MonoBehaviour {
 
-    public int distance = 20;
+    public int distance = 3;
     public GameObject player;
     public GameObject previousNode;
     public GameObject nextNode;
@@ -28,9 +28,9 @@ public class LineScript : MonoBehaviour {
             distanceToPlayer = (int)Vector3.Distance(player.transform.position, transform.position);
             if (distanceToPlayer > distance)
             {
-                if (distanceToPlayer < (distance + 10))
+                if (distanceToPlayer < (distance + 30))
                 {
-                    colorLine.a = 1 - ((float)distanceToPlayer / (float)(distance + 10));
+                    colorLine.a = 1 - ((float)distanceToPlayer / (float)(distance + 30));
                 }
                 else
                 {
@@ -49,8 +49,16 @@ public class LineScript : MonoBehaviour {
         }
         else
         {
+
             timeActivate -= Time.deltaTime;
+			colorLineActivated.a=255;
+			colorLineActivated.r=67;
+			colorLineActivated.g=120;
+			colorLineActivated.b=210;
+
             this.GetComponent<LineRenderer>().SetColors(colorLineActivated, colorLineActivated);
+			//colorLine.a = 255;
+			//this.GetComponent<LineRenderer>().SetColors(colorLine, colorLine);
             if (timeActivate < 0)
             {
                 lineActivated = false;

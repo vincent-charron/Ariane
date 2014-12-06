@@ -9,6 +9,7 @@ public class LoadLine : MonoBehaviour {
 	
 	public Material lineMaterial;
 	public Color ColorLine = Color.clear;
+	public Color colorLineActivated;
 	public GameObject previousLines;
 
 	//liste contenant l'ensemble des sphères formant la ligne
