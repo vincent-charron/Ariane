@@ -2,6 +2,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
+//using Vectrosity;
 
 public class CreateLine : MonoBehaviour {
 
@@ -9,7 +10,7 @@ public class CreateLine : MonoBehaviour {
     private int nbSphereLine = 0;	//le nombre de sphère composant le fil actuel
     public Color colorLine = Color.red;	//la couleur du fil
     public Color colorLineActivated = Color.blue;	//la couleur que prend le fil si le joueur s'en approche
-	public Material lineMaterial;	//le matériel du fil
+    public Material lineMaterial;	//le matériel du fil
 
 	//on enregistre une liste de gameobject qui se relieront entre eux pour former une ligne rouge
 	private LineClass lineSave;	//l'objet qui permettra d'enregistrer les différentes informations du fil, afin de les enregistrer et pouvoir recréer le fil à un prochaine partie
@@ -18,6 +19,10 @@ public class CreateLine : MonoBehaviour {
 	private GameObject currentLine;	//le gameObject formant le fil actuel
 	private List<GameObject> spheres;	//la liste permettant de stocker l'ensemble des sphères formant le fil.
 	private GameObject newSphere; //dernière sphère gameObject du fil
+    /*private VectorLine vl;
+    private List<Vector3> lv3;*/
+
+
 
 	// Use this for initialization
 	void Start () {
@@ -43,7 +48,27 @@ public class CreateLine : MonoBehaviour {
         newSphere.GetComponent<LineScript>().player = gameObject;
         newSphere.GetComponent<LineScript>().previousNode = null;
         newSphere.GetComponent<LineScript>().colorLine = colorLine;
-	}
+        //VectorLine vl = VectorLine.SetRay3D(Color.green, this.transform.position, new Vector3(-2, -2, -2));
+        /*lv3 = new List<Vector3>();
+        lv3.Add(this.transform.position);        
+        lv3.Add(new Vector3(-2, -2, -2));
+        //VectorLine vl = new VectorLine("test", new Vector3[] { this.transform.position, new Vector3(-2, -2, -2) }, null, 50.0F, LineType.Continuous, Joins.Fill);
+        vl = new VectorLine("test", lv3.ToArray(), null, 50.0F, LineType.Continuous, Joins.Fill);
+        vl.SetColor(Color.blue);
+        foreach (Vector3 v in vl.points3)
+        {
+            Debug.Log(v);
+        }
+        vl.Resize(4);
+        lv3.Add(new Vector3(-2, 0, -2));
+        lv3.Add(new Vector3(0, 0, -2));
+        vl.points3 = lv3.ToArray();
+        foreach (Vector3 v in vl.points3)
+        {
+            Debug.Log(v);
+        }
+        vl.Draw3D();*/
+    }
 	
 	// Update is called once per frame
 	void Update () {
@@ -81,10 +106,15 @@ public class CreateLine : MonoBehaviour {
 			lineRenderer.SetPosition(0, spheres.Last().transform.position);
 			lineRenderer.SetPosition(1, newSphere.transform.position);
 			spheres.Add(newSphere);
-		}
+        }
+        //vl.Draw3D();
 	}
-	
-	void OnApplicationQuit(){
-		lineSave.SaveLine ();	//au moment où l'on arrete l'application, on appelle la méthode permettant d'enregistrer toutes les informations du fil qui a été créé dans un fichier XML
-	}
+
+    void OnApplicationQuit()
+    {
+        if (spheres.Count > 0)
+        {
+            lineSave.SaveLine();	//au moment où l'on arrete l'application, on appelle la méthode permettant d'enregistrer toutes les informations du fil qui a été créé dans un fichier XML
+        }
+    }
 }

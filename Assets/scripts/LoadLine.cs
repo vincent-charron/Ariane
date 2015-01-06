@@ -25,7 +25,7 @@ public class LoadLine : MonoBehaviour {
 		GameObject line;
 		previousLines = new GameObject ("previousLines");
 
-		string[] xmlFiles = Directory.GetFiles (Application.dataPath+"\\xmlFiles", "*.xml");
+		string[] xmlFiles = Directory.GetFiles (Application.dataPath+"\\xmlFiles\\linesSave", "*.xml");
 
 		foreach (string file in xmlFiles) {
 			i = 0;

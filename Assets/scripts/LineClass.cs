@@ -33,7 +33,7 @@ public class LineClass{
 	public void SaveLine(){
 		string nameFile = Path.GetRandomFileName ().Replace(".", "X")+Path.GetRandomFileName ().Replace(".", "2")+".xml";
 		var serializer = new XmlSerializer(typeof (LineClass));
-		var stream = new FileStream(Application.dataPath+"\\xmlFiles\\"+nameFile, FileMode.Create);
+		var stream = new FileStream(Application.dataPath+"\\xmlFiles\\linesSave\\"+nameFile, FileMode.Create);
 		serializer.Serialize(stream, this);
 		stream.Close();
 	}

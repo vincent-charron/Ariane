@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="Windows-1252"?>
+<Line xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" name="lineObject">
+  <Spheres>
+    <sphere>
+      <Name>0</Name>
+      <Position>
+        <x>0</x>
+        <y>2</y>
+        <z>0</z>
+      </Position>
+      <Width>0</Width>
+      <ColorLine>
+        <r>1</r>
+        <g>1</g>
+        <b>1</b>
+        <a>1</a>
+      </ColorLine>
+      <ColorLineActivated>
+        <r>0</r>
+        <g>0</g>
+        <b>0</b>
+        <a>1</a>
+      </ColorLineActivated>
+    </sphere>
+  </Spheres>
+</Line>
