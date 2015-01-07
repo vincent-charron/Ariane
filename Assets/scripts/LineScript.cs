@@ -12,13 +12,25 @@ public class LineScript : MonoBehaviour {
     public Color colorLine;
     public Color colorLineActivated;
     private bool lineActivated;
+    private bool nodeActivated;
+    private bool upActivation;
+    private bool bottomActivation;
     public float timeActivate;
+    public float timeNodeActivate;
+    public bool active;
 
 	// Use this for initialization
 	void Start () {
         distanceToPlayer = 0;
         lineActivated = false;
-        timeActivate = 3;
+        nodeActivated = false;
+        active = false;
+
+        upActivation = true;
+        bottomActivation = true;
+
+        timeActivate = 15;
+        timeNodeActivate = 0.1f;
 	}
 	
 	// Update is called once per frame
@@ -46,23 +58,47 @@ public class LineScript : MonoBehaviour {
                     this.GetComponent<LineRenderer>().SetColors(colorLine, colorLine);
                 }
             }
+            if (active)
+            {
+                active = false;
+                lineActivated = true;
+                nodeActivated = true;
+            }
         }
         else
         {
-
-            timeActivate -= Time.deltaTime;
 			colorLineActivated.a=255;
 			colorLineActivated.r=67;
 			colorLineActivated.g=120;
-			colorLineActivated.b=210;
-
+            colorLineActivated.b = 210;
             this.GetComponent<LineRenderer>().SetColors(colorLineActivated, colorLineActivated);
-			//colorLine.a = 255;
-			//this.GetComponent<LineRenderer>().SetColors(colorLine, colorLine);
+
+            if (nodeActivated && lineActivated)
+            {
+                timeNodeActivate -= Time.deltaTime;
+                if (timeNodeActivate < 0)
+                {
+                    nodeActivated = false;
+                    timeNodeActivate = 0.1f;
+                    if (previousNode != null && bottomActivation)
+                    {
+                        previousNode.GetComponent<LineScript>().ActivateLineBottom(timeActivate);
+                    }
+                    if (nextNode != null && upActivation)
+                    {
+                        nextNode.GetComponent<LineScript>().ActivateLineUp(timeActivate);
+                    }
+                }
+            }
+            timeActivate -= Time.deltaTime;
+            //colorLine.a = 255;
+            //this.GetComponent<LineRenderer>().SetColors(colorLine, colorLine);
             if (timeActivate < 0)
             {
                 lineActivated = false;
-                timeActivate = 3;
+                upActivation = true;
+                bottomActivation = true;
+                timeActivate = 15;
                 this.GetComponent<LineRenderer>().SetColors(colorLine, colorLine);
             }
         }
@@ -73,32 +109,23 @@ public class LineScript : MonoBehaviour {
         if (collider.gameObject.name == "Sphere")
         {
             lineActivated = true;
-            if (nextNode != null)
-            {
-                nextNode.GetComponent<LineScript>().ActivateLineUp();
-            }
-            if (previousNode != null)
-            {
-                previousNode.GetComponent<LineScript>().ActivateLineBottom();
-            }
+            nodeActivated = true;
         }
     }
 
-    void ActivateLineUp()
+    void ActivateLineUp(float timeLeft)
     {
         lineActivated = true;
-        if (nextNode != null)
-        {
-            nextNode.GetComponent<LineScript>().ActivateLineUp();
-        }
+        nodeActivated = true;
+        bottomActivation = false;
+        timeActivate = timeLeft;
     }
 
-    void ActivateLineBottom()
+    void ActivateLineBottom(float timeLeft)
     {
         lineActivated = true;
-        if (previousNode != null)
-        {
-            previousNode.GetComponent<LineScript>().ActivateLineBottom();
-        }
+        nodeActivated = true;
+        upActivation = false;
+        timeActivate = timeLeft;
     }
 }

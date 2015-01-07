@@ -48,6 +48,7 @@ public class CreateLine : MonoBehaviour {
         newSphere.GetComponent<LineScript>().player = gameObject;
         newSphere.GetComponent<LineScript>().previousNode = null;
         newSphere.GetComponent<LineScript>().colorLine = colorLine;
+        newSphere.GetComponent<LineScript>().colorLineActivated = colorLineActivated;
         //VectorLine vl = VectorLine.SetRay3D(Color.green, this.transform.position, new Vector3(-2, -2, -2));
         /*lv3 = new List<Vector3>();
         lv3.Add(this.transform.position);        
