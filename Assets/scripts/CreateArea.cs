@@ -91,6 +91,7 @@ public sealed class CreateArea {
             POI.GetComponent<SphereCollider>().isTrigger = true;
             //POI.GetComponent<SphereCollider>().radius = 0.25f;
             POI.AddComponent<POIScript>();
+            POI.AddComponent<AudioSource>();
         });
     }
 
@@ -123,6 +124,7 @@ public sealed class CreateArea {
 				POI.layer = LayerMask.NameToLayer("POI");
                 //POI.GetComponent<SphereCollider>().radius = 0.25f;
                 POI.AddComponent<POIScript>();
+                POI.AddComponent<AudioSource>();
                 POI.tag = "POI";
                 POIList.Add(POI);
             }

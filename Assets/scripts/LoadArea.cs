@@ -14,6 +14,11 @@ public class LoadArea : MonoBehaviour {
 	// Use this for initialization
     void Start()
     {
+        GameObject vrmanager = GameObject.Find("VRManager");
+        if (vrmanager)
+        {
+            vrmanager.GetComponent<VRManagerScript>().ConfigFile = Application.dataPath + "/configuration/Ariane.vrx";
+        }
         CA = CreateArea.Instance;
         string[] xmlFiles = Directory.GetFiles(Application.dataPath + "\\xmlFiles\\areasSave", "*.xml");
         if (xmlFiles.Length == 0)

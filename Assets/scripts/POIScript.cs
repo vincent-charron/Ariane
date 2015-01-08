@@ -9,11 +9,19 @@ public class POIScript : MonoBehaviour {
 	private bool activated;
 	public GameObject[] poi;
 	public List<GameObject> poiInside;
+    private AudioSource AS;
 	
 	// Use this for initialization
 	void Start () {
         activate = false;
 		activated = false;
+        AS = gameObject.GetComponent<AudioSource>();
+        AS.clip = Resources.Load("static_poi") as AudioClip;
+        AS.maxDistance = 25;
+        AS.minDistance = 10;
+        AS.rolloffMode = AudioRolloffMode.Linear;
+        AS.loop = true;
+        AS.Play();
 		poi = GameObject.FindGameObjectsWithTag("nodeLine");
 		poiInside = new List<GameObject> ();
 		foreach (GameObject go in poi)
@@ -34,6 +42,7 @@ public class POIScript : MonoBehaviour {
 			{
     			go.GetComponent<LineScript>().active = true;
 				go.layer = LayerMask.NameToLayer("Default");
+                AS.Stop();
             }
             activated = true;
         }

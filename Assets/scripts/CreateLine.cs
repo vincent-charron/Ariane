@@ -19,13 +19,10 @@ public class CreateLine : MonoBehaviour {
 	private GameObject currentLine;	//le gameObject formant le fil actuel
 	private List<GameObject> spheres;	//la liste permettant de stocker l'ensemble des sphères formant le fil.
 	private GameObject newSphere; //dernière sphère gameObject du fil
-    /*private VectorLine vl;
-    private List<Vector3> lv3;*/
-
-
 
 	// Use this for initialization
 	void Start () {
+        audio.Play();
 		//création du gameObject fil
 		currentLine = new GameObject ("currentLine");
 		spheres = new List<GameObject> ();
@@ -49,26 +46,6 @@ public class CreateLine : MonoBehaviour {
         newSphere.GetComponent<LineScript>().previousNode = null;
         newSphere.GetComponent<LineScript>().colorLine = colorLine;
         newSphere.GetComponent<LineScript>().colorLineActivated = colorLineActivated;
-        //VectorLine vl = VectorLine.SetRay3D(Color.green, this.transform.position, new Vector3(-2, -2, -2));
-        /*lv3 = new List<Vector3>();
-        lv3.Add(this.transform.position);        
-        lv3.Add(new Vector3(-2, -2, -2));
-        //VectorLine vl = new VectorLine("test", new Vector3[] { this.transform.position, new Vector3(-2, -2, -2) }, null, 50.0F, LineType.Continuous, Joins.Fill);
-        vl = new VectorLine("test", lv3.ToArray(), null, 50.0F, LineType.Continuous, Joins.Fill);
-        vl.SetColor(Color.blue);
-        foreach (Vector3 v in vl.points3)
-        {
-            Debug.Log(v);
-        }
-        vl.Resize(4);
-        lv3.Add(new Vector3(-2, 0, -2));
-        lv3.Add(new Vector3(0, 0, -2));
-        vl.points3 = lv3.ToArray();
-        foreach (Vector3 v in vl.points3)
-        {
-            Debug.Log(v);
-        }
-        vl.Draw3D();*/
     }
 	
 	// Update is called once per frame
