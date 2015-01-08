@@ -60,6 +60,8 @@ public class LoadLine : MonoBehaviour {
                 newSphere.GetComponent<LineScript>().previousNode = spheres.Last();
                 spheres.Last().GetComponent<LineScript>().nextNode = newSphere;
                 newSphere.GetComponent<LineScript>().nextNode = null;
+                newSphere.tag = "nodeLine";
+                newSphere.GetComponent<SphereCollider>().radius = 0.4f;
 				newSphere.transform.position = container.Spheres [i].Position;
 				lineRenderer.material = lineMaterial;
 				lineRenderer.SetWidth (container.Spheres [i].Width, container.Spheres [i].Width);

@@ -85,8 +85,10 @@ public sealed class CreateArea {
             POI.transform.localPosition = g.Position;
             POI.transform.localScale = Vector3.one * sizePOI;
             POI.name = i.ToString();
+            POI.tag = "POI";
             i++;
             POI.GetComponent<SphereCollider>().isTrigger = true;
+            //POI.GetComponent<SphereCollider>().radius = 0.25f;
             POI.AddComponent<POIScript>();
         });
     }
@@ -117,7 +119,9 @@ public sealed class CreateArea {
                 POI.transform.localScale = Vector3.one * sizePOI;
                 POI.name = POIList.Count.ToString();
                 POI.GetComponent<SphereCollider>().isTrigger = true;
+                //POI.GetComponent<SphereCollider>().radius = 0.25f;
                 POI.AddComponent<POIScript>();
+                POI.tag = "POI";
                 POIList.Add(POI);
             }
             else
