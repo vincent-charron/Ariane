@@ -73,6 +73,12 @@ public class CreateLine : MonoBehaviour {
 	
 	// Update is called once per frame
 	void Update () {
+
+		if(Input.GetKeyDown(KeyCode.F))
+		{
+			Screen.fullScreen = !Screen.fullScreen;
+		}
+
 		//script de création et de sauvegarde du fil actuel
 		if (Vector3.Distance(newSphere.transform.position, this.transform.position) > 0.5) {
 			nbSphereLine++;

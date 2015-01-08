@@ -83,7 +83,8 @@ public sealed class CreateArea {
             GameObject POI = GameObject.CreatePrimitive(PrimitiveType.Sphere);
             POI.transform.parent = area.transform;
             POI.transform.localPosition = g.Position;
-            POI.transform.localScale = Vector3.one * sizePOI;
+			POI.transform.localScale = Vector3.one * sizePOI;	
+			POI.layer = LayerMask.NameToLayer("POI");
             POI.name = i.ToString();
             POI.tag = "POI";
             i++;
@@ -119,6 +120,7 @@ public sealed class CreateArea {
                 POI.transform.localScale = Vector3.one * sizePOI;
                 POI.name = POIList.Count.ToString();
                 POI.GetComponent<SphereCollider>().isTrigger = true;
+				POI.layer = LayerMask.NameToLayer("POI");
                 //POI.GetComponent<SphereCollider>().radius = 0.25f;
                 POI.AddComponent<POIScript>();
                 POI.tag = "POI";
